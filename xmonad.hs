@@ -24,7 +24,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "urxvt"
+myTerminal      = "xterm"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -67,13 +67,13 @@ myFocusedBorderColor = "#94ebeb"
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
-    [ ((modm,		    xK_t), spawn $ XMonad.terminal conf)
+    [ ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_r     ), spawn "dmenu_run")
+    , ((modm,               xK_d     ), spawn "dmenu_run")
 
     -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    , ((modm,               xK_f     ), spawn "pcmanfm")
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -106,7 +106,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
 
     -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
+    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )  
 
     -- Shrink the master area
     , ((modm,               xK_h     ), sendMessage Shrink)
@@ -115,7 +115,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_l     ), sendMessage Expand)
 
     -- Push window back into tiling
-    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
+    , ((modm .|. shiftMask, xK_t     ), withFocused $ windows . W.sink)
 
     -- Increment the number of windows in the master area
     , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
@@ -251,8 +251,8 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-	spawnOnce "nitrogen --restore &"
-	spawnOnce "compton &"
+        spawnOnce "nitrogen --restore &"
+        spawnOnce "compton &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -260,8 +260,8 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do 
-	xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc" --for multi monitors add more
-	xmonad $ docks defaults
+        xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc" --for multi monitors add more
+        xmonad $ docks defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -298,8 +298,8 @@ help = unlines ["The default modifier key is 'mod'. Default keybindings:",
     "",
     "-- launching and killing programs",
     "mod-t  Launch xterminal",
-    "mod-r            Launch dmenu",
-    "mod-Shift-p      Launch gmrun",
+    "mod-d            Launch dmenu",
+    "mod-Shift-p      Launch pcmanfm",
     "mod-Shift-c      Close/kill the focused window",
     "mod-Space        Rotate through the available layout algorithms",
     "mod-Shift-Space  Reset the layouts on the current workSpace to default",
@@ -322,7 +322,7 @@ help = unlines ["The default modifier key is 'mod'. Default keybindings:",
     "mod-l  Expand the master area",
     "",
     "-- floating layer support",
-    "mod-t  Push window back into tiling; unfloat and re-tile it",
+    "mod-Shift-t  Push window back into tiling; unfloat and re-tile it",
     "",
     "-- increase or decrease number of windows in the master area",
     "mod-comma  (mod-,)   Increment the number of windows in the master area",
