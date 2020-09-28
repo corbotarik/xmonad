@@ -72,9 +72,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
     , ((modm,               xK_d     ), spawn "dmenu_run")
 
-    -- launch gmrun
+    -- launch pcmanfm
     , ((modm,               xK_f     ), spawn "pcmanfm")
-
+    
+    -- launch firefox
+    , ((modm,               xK_b     ), spawn "firefox")
+    
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
@@ -260,7 +263,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do 
-        xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobarrc" --for multi monitors add more
+        xmproc <- spawnPipe "xmobar /home/corbotarik/.config/xmobar/xmobarrc" --for multi monitors add more
         xmonad $ docks defaults
 
 -- A structure containing your configuration settings, overriding
