@@ -15,6 +15,8 @@ import XMonad
 import Data.Monoid
 import System.Exit
 
+import XMonad.Layout.Spacing
+
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 
@@ -288,7 +290,8 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook         = myLayout,
+        layoutHook = spacingRaw True (Border 30 4 4 4) True (Border 4 4 4 4) True $
+                             layoutHook def,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
@@ -302,7 +305,8 @@ help = unlines ["The default modifier key is 'mod'. Default keybindings:",
     "-- launching and killing programs",
     "mod-t  Launch xterminal",
     "mod-d            Launch dmenu",
-    "mod-Shift-p      Launch pcmanfm",
+    "mod-f            Launch pcmanfm",
+    "mod-b            Launch firefox",
     "mod-Shift-c      Close/kill the focused window",
     "mod-Space        Rotate through the available layout algorithms",
     "mod-Shift-Space  Reset the layouts on the current workSpace to default",
