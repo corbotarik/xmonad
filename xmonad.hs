@@ -61,7 +61,7 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "##bbbbbb"
-myFocusedBorderColor = "#94ebeb"
+myFocusedBorderColor = "#4771b5"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -290,7 +290,7 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook = spacingRaw True (Border 30 4 4 4) True (Border 4 4 4 4) True $
+        layoutHook = spacingRaw True (Border 27 4 4 4) True (Border 4 4 4 4) True $
                              layoutHook def,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
