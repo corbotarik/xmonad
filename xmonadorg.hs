@@ -1,4 +1,5 @@
--- xmonad.hs
+
+--
 -- xmonad example config file.
 --
 -- A template showing all available configuration hooks,
@@ -6,6 +7,9 @@
 --
 -- Normally, you'd only override those defaults you care about.
 --
+
+-- IMPORTS --
+
 import XMonad.Hooks.ManageDocks  --xmobar util
 
 import XMonad
@@ -19,12 +23,6 @@ import XMonad.Util.SpawnOnce
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
-
-
-import Graphics.X11.ExtraTypes.XF86
-import XMonad.Hooks.DynamicLog
-
-
 
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
@@ -71,18 +69,8 @@ myFocusedBorderColor = "#4771b5"
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
-
-    
-    -- volume keys
-    [ ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
-    , ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
-    , ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
-
-  , ((0, xF86XK_MonBrightnessUp), spawn "lux -a 10%")
-  , ((0, xF86XK_MonBrightnessDown), spawn "lux -s 10%")
-
     -- launch a terminal
-    , ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
+    [ ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
     , ((modm,               xK_d     ), spawn "dmenu_run")
@@ -91,7 +79,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_f     ), spawn "pcmanfm")
     
     -- launch firefox
-    , ((modm .|. shiftMask,             xK_b     ), spawn "firefox")
+    , ((modm,               xK_b     ), spawn "firefox")
     
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -176,8 +164,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
-
-
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
 --
@@ -208,7 +194,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Mirror tiled ||| Full
+myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -243,8 +229,6 @@ myManageHook = composeAll
       resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore ]
 
-
-
 ------------------------------------------------------------------------
 -- Event handling
 
@@ -276,24 +260,16 @@ myStartupHook = do
         spawnOnce "nitrogen --restore &"
         spawnOnce "compton &"
 
-
-------------------------------------------------------------------------
--- Command to launch the bar.
-myBar = "xmobar"
-
--- Custom PP, configure it as you like. It determines what is being written to the bar.
-myPP = xmobarPP { ppOrder               = \(ws:l:t:_)   -> [ws]
-,ppCurrent = xmobarColor "#4771b5" "" }
-
--- Key binding to toggle the gap for the bar.
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
-
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad =<< statusBar myBar myPP toggleStrutsKey defaults
+main = do 
+        xmproc <- spawnPipe "xmobar /home/corbotarik/.config/xmobar/xmobarrc" --for multi monitors add more
+        xmonad $ docks defaults
+        
+        --xmonad $ docks $ defaults { logHook = dynamicLogWithPP $ def { ppOutput = hPutStrLn xmproc } }
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -317,11 +293,12 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook = spacingRaw True (Border 4 4 4 4) True (Border 4 4 4 4) True $
+        layoutHook = spacingRaw True (Border 27 4 4 4) True (Border 4 4 4 4) True $
                              layoutHook def,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
         logHook            = myLogHook,
+        --logHook = dynamicLogWithPP $ def { ppOutput = hPutStrLn xmproc },
         startupHook        = myStartupHook
     }
 
@@ -376,4 +353,3 @@ help = unlines ["The default modifier key is 'mod'. Default keybindings:",
     "mod-button1  Set the window to floating mode and move by dragging",
     "mod-button2  Raise the window to the top of the stack",
     "mod-button3  Set the window to floating mode and resize by dragging"]
-
