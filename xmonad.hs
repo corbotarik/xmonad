@@ -63,8 +63,8 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "##bbbbbb"
-myFocusedBorderColor = "#4771b5"
+myNormalBorderColor  = "#B3B2C8"
+myFocusedBorderColor = "#59A2BE"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -78,9 +78,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
     , ((0, xF86XK_AudioRaiseVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
 
-  , ((0, xF86XK_MonBrightnessUp), spawn "lux -a 10%")
-  , ((0, xF86XK_MonBrightnessDown), spawn "lux -s 10%")
-
+    , ((0, xF86XK_MonBrightnessUp), spawn "lux -a 10%")
+    , ((0, xF86XK_MonBrightnessDown), spawn "lux -s 10%")
+  
+    , ((0, xK_Print), spawn "scrot $HOME/Pictures/%Y-%m-%d-%H:%M:%S.png")
+  
+    -- keyboard
+    , ((modm .|. shiftMask,             xK_o     ), spawn "setxkbmap -layout us")
+    , ((modm .|. shiftMask,             xK_p     ), spawn "setxkbmap -layout ba")
+ 
     -- launch a terminal
     , ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
 
@@ -275,7 +281,8 @@ myLogHook = return ()
 myStartupHook = do
         spawnOnce "nitrogen --restore &"
         spawnOnce "compton &"
-
+        spawnOnce "flameshot &"
+        spawnOnce "xrdb -load ~/.Xresources"
 
 ------------------------------------------------------------------------
 -- Command to launch the bar.
@@ -283,7 +290,7 @@ myBar = "xmobar"
 
 -- Custom PP, configure it as you like. It determines what is being written to the bar.
 myPP = xmobarPP { ppOrder               = \(ws:l:t:_)   -> [ws]
-,ppCurrent = xmobarColor "#4771b5" "" }
+,ppCurrent = xmobarColor "#59A2BE" "" }
 
 -- Key binding to toggle the gap for the bar.
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
