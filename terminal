@@ -1,0 +1,9 @@
+PS1='\e[1;36mhachi@\h \W \$\e[m'
+
+PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$'
+
+org
+\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$
+
+da vratis staro samo obrises export zadnju liniju
+
