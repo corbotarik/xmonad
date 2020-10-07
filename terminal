@@ -7,3 +7,8 @@ org
 
 da vratis staro samo obrises export zadnju liniju
 
+
+export PS1='\e[1;36m ハ \W - \e[m'
+
+
+
